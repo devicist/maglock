@@ -5,7 +5,7 @@
  * 
  * USAGE
  * 
- * Send 1 to disable the maglock. Send 2 to enable it.
+ * Send 0 to unlock/disable the maglock. Send 1 to lock/enable it.
  * Send values as ASCII characters. 
  * CR and NL are ignored.
  * 
@@ -16,11 +16,12 @@
  * contact: Nicholas Stedman - nick@devicist.com
 */
 
-// #define DEBUG                                 // uncomment to debug to console
+
+// #define DEBUG                             // uncomment to debug to console
 
 const int maglockControlPin = 14;
-int maglockControlVal = 0;                    // assign default state
-const int buttonPin = 12;                     // unused button on board
+int maglockControlVal = 0;                // assign default state
+const int buttonPin = 12;                 // unused button on board
 
 void setup() {
   pinMode(maglockControlPin, OUTPUT);
@@ -32,20 +33,31 @@ void loop() {
   if (Serial.available()) {
     String maglockSetterString = Serial.readString();
     maglockSetterString.trim();
-    int maglockSetter = maglockSetterString.toInt();
-    if((maglockSetter == 1) || (maglockSetter == 2)) {
 #ifdef DEBUG
-      Serial.println(maglockSetter, DEC);     // debug the output state
+      Serial.print(maglockSetterString + " - ");
+#endif    
+
+    if(maglockSetterString.equals("0")) {
+      maglockControlVal = 0;
+#ifdef DEBUG
+      Serial.println("unlock");
 #endif
-      maglockSetter--;                        // adjust for output
-      maglockControlVal = maglockSetter;      // ignore errant values
     }
+
+    else if(maglockSetterString.equals("1")) {
+      maglockControlVal = 1;
+#ifdef DEBUG
+      Serial.println("lock");
+#endif
+    }
+
     else {
 #ifdef DEBUG      
-      Serial.println("invalid input");        // debug the output state
+      Serial.println("invalid input");
 #endif      
     }
   }
+
   digitalWrite(maglockControlPin, maglockControlVal);
-  delay(100);                                 // rate limit state change
+  delay(100);                             // rate limit state change
 }
