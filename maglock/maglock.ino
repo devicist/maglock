@@ -8,6 +8,9 @@
  * Send 0 to unlock/disable the maglock. Send 1 to lock/enable it.
  * Send values as ASCII characters. 
  * CR and NL are ignored.
+ * Errant values are ignored.
+ *
+ * Tested on an Arduino Uno.
  * 
  * Attach to maglock via amplifier.
  * (eg. https://www.amazon.ca/gp/product/B07F7SV84V/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
